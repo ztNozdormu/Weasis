@@ -100,6 +100,10 @@ public class NetworkUtil {
   private static void updateHeadersWithAppProperties(URLConnection urlConnection) {
     urlConnection.setRequestProperty("User-Agent", AppProperties.WEASIS_USER_AGENT);
     urlConnection.setRequestProperty("Weasis-User", AppProperties.WEASIS_USER);
+    // 阿里云OSS存储白名单头设置
+    if(urlConnection.getURL().getHost().contains(".aliyuncs")){
+      urlConnection.setRequestProperty("Referer","https://out.kndcloud.com/");
+    }
   }
 
   private static AuthResponse prepareAuthConnection(
@@ -113,6 +117,10 @@ public class NetworkUtil {
     request.addHeader("User-Agent", AppProperties.WEASIS_USER_AGENT); // NON-NLS
     request.addHeader("Weasis-User", AppProperties.WEASIS_USER); // NON-NLS
 
+    // 阿里云OSS存储白名单头设置
+    if(request.getUrl().contains(".aliyuncs")){
+      request.addHeader("Referer","https://out.kndcloud.com/");
+    }
     try {
       OAuth20Service service = OAuth2ServiceFactory.getService(authMethod);
       if (service == null) {
